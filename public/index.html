@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Speech to Text</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%234f46e5' d='M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11h-2Z'/></svg>" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11h-2Z"/></svg>
+      <span>Speech to Text</span>
+    </div>
+    <nav class="tabs" role="tablist">
+      <button class="tab active" data-view="live" role="tab">Live</button>
+      <button class="tab" data-view="history" role="tab">History</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Live transcription -->
+    <section id="view-live" class="view">
+      <div class="card recorder">
+        <div class="controls">
+          <label class="field">
+            <span>Engine</span>
+            <select id="engine">
+              <option value="gemini">Gemini Live (server)</option>
+              <option value="browser">Browser speech API</option>
+            </select>
+          </label>
+          <label class="field" id="lang-field">
+            <span>Language</span>
+            <select id="language">
+              <option value="hi-IN">Hindi + English (Hinglish)</option>
+              <option value="en-IN">English (India)</option>
+            </select>
+          </label>
+        </div>
+
+        <button id="record" class="record" aria-pressed="false">
+          <span class="dot"></span><span id="record-label">Start speaking</span>
+        </button>
+
+        <div class="status-row">
+          <span id="status" class="status">Idle</span>
+          <span id="timer" class="timer">00:00</span>
+          <div class="meter" aria-hidden="true"><div id="meter-fill"></div></div>
+        </div>
+
+        <div id="transcript" class="transcript placeholder" aria-live="polite">
+          Press <strong>Start speaking</strong> and talk — e.g. “Kal meeting 10 baje hai, please send the agenda.”
+        </div>
+        <p id="engine-note" class="note"></p>
+      </div>
+    </section>
+
+    <!-- History dashboard -->
+    <section id="view-history" class="view" hidden>
+      <div class="history-head">
+        <input id="search" type="search" placeholder="Search transcriptions…" />
+        <button id="new-entry" class="btn primary">New entry</button>
+      </div>
+      <p id="history-summary" class="note"></p>
+      <ul id="history-list" class="history-list"></ul>
+      <div class="pager">
+        <button id="prev" class="btn">Previous</button>
+        <span id="page-info"></span>
+        <button id="next" class="btn">Next</button>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="editor">
+    <form method="dialog" id="editor-form">
+      <h2 id="editor-title">Edit transcription</h2>
+      <label class="field"><span>Title</span><input id="f-title" maxlength="200" /></label>
+      <label class="field"><span>Text</span><textarea id="f-text" rows="8" maxlength="20000" required></textarea></label>
+      <label class="field"><span>Language</span>
+        <select id="f-language">
+          <option value="hi-en">Hindi + English</option>
+          <option value="hi">Hindi</option>
+          <option value="en">English</option>
+        </select>
+      </label>
+      <p id="editor-error" class="error"></p>
+      <div class="dialog-actions">
+        <button value="cancel" formnovalidate class="btn">Cancel</button>
+        <button id="editor-save" value="save" class="btn primary">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" role="status"></div>
+  <script src="js/app.js" type="module"></script>
+</body>
+</html>

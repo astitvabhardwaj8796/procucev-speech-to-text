@@ -1,0 +1,22 @@
+# One-click deploy on Render: Dashboard -> New -> Blueprint -> select this repo.
+services:
+  - type: web
+    name: speech-to-text
+    runtime: node
+    plan: free
+    buildCommand: npm ci --omit=dev
+    startCommand: node src/server.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: speech-to-text-db
+          property: connectionString
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_LIVE_MODEL
+        value: gemini-3.1-flash-live-preview
+databases:
+  - name: speech-to-text-db
+    plan: free
+    databaseName: speech_to_text
