@@ -5,7 +5,8 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: speech_to_text
-    ports: ["5432:5432"]
+    # Not published to the host (avoids clashing with a local Postgres on 5432);
+    # the app reaches it over the compose network as db:5432.
     volumes: [pgdata:/var/lib/postgresql/data]
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
